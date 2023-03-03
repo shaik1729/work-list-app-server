@@ -14,11 +14,16 @@ router.get('/', auth, function(req, res, next) {
             console.log(err);
             return res.status(500).json({message: 'Something went wrong'});
         }
-        const result = {
+        var result = {
             'status': 200,
             'data': data,
             'message': 'Tasks fetched successfully',
         };
+
+        if(req.new_auth_token) {
+            result['new_auth_token'] = req.new_auth_token;
+        }
+
         return res.json(result);
     });
 
@@ -35,7 +40,18 @@ router.post('/', auth, function(req, res, next) {
             console.log(err);
             return res.status(500).json({message: 'Something went wrong'});
         }
-        return res.json(data);
+        var result = {
+            'status': 200,
+            'data': data,
+            'message': 'Tasks Added successfully',
+        };
+
+        if(req.new_auth_token) {
+            result['new_auth_token'] = req.new_auth_token;
+        }
+
+        return res.json(result);
+        // return res.json(data);
     });
 });
 
@@ -51,7 +67,18 @@ router.put('/:id', auth, function(req, res, next) {
             console.log(err);
             return res.status(500).json({message: 'Something went wrong'});
         }
-        return res.json(data);
+        var result = {
+            'status': 200,
+            'data': data,
+            'message': 'Task Updated successfully',
+        };
+
+        if(req.new_auth_token) {
+            result['new_auth_token'] = req.new_auth_token;
+        }
+
+        return res.json(result);
+        // return res.json(data);
     });
 });
 
@@ -65,7 +92,18 @@ router.delete('/:id', auth, function(req, res, next) {
             console.log(err);
             return res.status(500).json({message: 'Something went wrong'});
         }
-        return res.json(data);
+        var result = {
+            'status': 200,
+            'data': data,
+            'message': 'Tasks Deleted successfully',
+        };
+
+        if(req.new_auth_token) {
+            result['new_auth_token'] = req.new_auth_token;
+        }
+
+        return res.json(result);
+        // return res.json(data);
     });
 
 });
@@ -80,12 +118,23 @@ router.get('/:id', auth, function(req, res, next) {
             console.log(err);
             return res.status(500).json({message: 'Something went wrong'});
         }else{
-            const result = {
+            // const result = {
+            //     'status': 200,
+            //     'data': data[0],
+            //     'message': 'Task fetched successfully',
+            // };
+            var result = {
                 'status': 200,
                 'data': data[0],
-                'message': 'Task fetched successfully',
+                'message': 'Tasks Added successfully',
             };
+    
+            if(req.new_auth_token) {
+                result['new_auth_token'] = req.new_auth_token;
+            }
+    
             return res.json(result);
+            // return res.json(result);
         }
     });
 });

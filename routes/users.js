@@ -79,7 +79,7 @@ router.post('/login', (req, res, next) => {
               return res.status(401).json({message: 'Email is not verified kindly verify your email'});
             }else{
 
-              const auth_token = jwt.sign({ username: username, userid: data[0].id }, "somesecret", { expiresIn: '15s' });
+              const auth_token = jwt.sign({ username: username, user_id: data[0].id }, "somesecret", { expiresIn: '1m' });
               // const refresh_token = jwt.sign({ username: username, userid: data[0].id }, "somesecret", { expiresIn: '5m' });
 
               const result = {
@@ -164,21 +164,21 @@ router.post('/generate-verify-token', (req, res, next) => {
   }
 });
 
-router.post('/get-auth-token-by-refresh-token', (req, res, next) => {
-  const refresh_token = req.body.refresh_token;
+// router.post('/get-auth-token-by-refresh-token', (req, res, next) => {
+//   const refresh_token = req.body.refresh_token;
 
-  if(!refresh_token) {
-    return res.status(400).json({message: 'Please provide a refresh token'});
-  }else{
-    const response = validateToken(refresh_token);
-    if(!response.status){
-      return res.status(401).json({message: 'Invalid refresh token'});
-    }else{
-      const new_auth_token = jwt.sign({ username: response.email, userid: response.user_id }, "somesecret", { expiresIn: '15s' });
-      return res.status(200).json({ data: { auth_token: new_auth_token }});
-    }
-  }
-});
+//   if(!refresh_token) {
+//     return res.status(400).json({message: 'Please provide a refresh token'});
+//   }else{
+//     const response = validateToken(refresh_token);
+//     if(!response.status){
+//       return res.status(401).json({message: 'Invalid refresh token'});
+//     }else{
+//       const new_auth_token = jwt.sign({ username: response.email, userid: response.user_id }, "somesecret", { expiresIn: '15s' });
+//       return res.status(200).json({ data: { auth_token: new_auth_token }});
+//     }
+//   }
+// });
     
 
 module.exports = router;
