@@ -16,17 +16,6 @@ const auth = (req, res, next) => {
         req.new_auth_token = GenerateToken(response);
         next();
     }
-
-    // try{
-    //     const decoded = jwt.verify(token, 'somesecret');
-    //     req.user = decoded;
-    //     req.token = token;
-    //     next();
-    // }catch(e) {
-    //     console.log(e);
-    //     return res.status(401).json({message: 'authorization token is invalid please login and get the token'});
-    // }
-
 }
 
 module.exports = auth;

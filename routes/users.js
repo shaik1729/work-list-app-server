@@ -3,7 +3,6 @@ var router = express.Router();
 var database = require('../database');
 var jwt = require('jsonwebtoken');
 const VerifyEmailTokenSender = require('../helpers/VerifyEmailTokenSender');
-const validateToken = require('../helpers/validateToken');
 
 const bcrypt = require("bcrypt");
 
@@ -36,8 +35,6 @@ router.post('/signup', function(req, res, next) {
 
       return res.status(200).json(result);
   });
-
-  // res.json({message: 'User created successfully check your email for verification'});
 });
 
 router.post('/login', (req, res, next) => {
@@ -80,12 +77,10 @@ router.post('/login', (req, res, next) => {
             }else{
 
               const auth_token = jwt.sign({ username: username, user_id: data[0].id }, "somesecret", { expiresIn: '1m' });
-              // const refresh_token = jwt.sign({ username: username, userid: data[0].id }, "somesecret", { expiresIn: '5m' });
 
               const result = {
                 'status': 200,
                 'auth_token': auth_token,
-                // 'refresh_token': refresh_token,
                 'message': 'User logged in successfully'
               };
               return res.json(result);
@@ -104,8 +99,6 @@ router.post('/login', (req, res, next) => {
 
 router.get('/verify/:token', (req, res, next) => {
 
-  // console.log("Verifying Token: ", req.params.token)
-
   let token = req.params.token;
 
   if(!token) {
@@ -118,11 +111,6 @@ router.get('/verify/:token', (req, res, next) => {
         return res.status(401).json({message: 'Invalid token'});
       }else{
         const email = decoded.email;
-        // const id = decoded.user_id;
-  
-        // var query = `select * from users where email = '${email}'`;
-  
-        // var query = `UPDATE users SET is_email_verified = 1 WHERE email = ${email}`;
         var query = `UPDATE users SET is_email_verified = 1 WHERE email = "${email}"`;
   
         database.query(query, function(err, data) {
@@ -133,7 +121,6 @@ router.get('/verify/:token', (req, res, next) => {
           }else{
             return res.status(200).json({message: 'Email verified successfully'});
           }
-          // console.log(data);
         });
       }
     });
@@ -163,22 +150,5 @@ router.post('/generate-verify-token', (req, res, next) => {
     });
   }
 });
-
-// router.post('/get-auth-token-by-refresh-token', (req, res, next) => {
-//   const refresh_token = req.body.refresh_token;
-
-//   if(!refresh_token) {
-//     return res.status(400).json({message: 'Please provide a refresh token'});
-//   }else{
-//     const response = validateToken(refresh_token);
-//     if(!response.status){
-//       return res.status(401).json({message: 'Invalid refresh token'});
-//     }else{
-//       const new_auth_token = jwt.sign({ username: response.email, userid: response.user_id }, "somesecret", { expiresIn: '15s' });
-//       return res.status(200).json({ data: { auth_token: new_auth_token }});
-//     }
-//   }
-// });
-    
 
 module.exports = router;
